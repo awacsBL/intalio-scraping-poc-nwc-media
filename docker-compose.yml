@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-nwc_media}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nwc_media123}
+      POSTGRES_DB: ${POSTGRES_DB:-instagram_scraper}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  scraper:
+    build: .
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-nwc_media}:${POSTGRES_PASSWORD:-nwc_media123}@postgres:5432/${POSTGRES_DB:-instagram_scraper}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app
+      - ./logs:/app/logs
+      # Cache volumes to prevent redownloading models and packages on subusequent runs
+      - huggingface_cache:/root/.cache/huggingface
+      - pip_cache:/root/.cache/pip
+      - torch_cache:/root/.cache/torch
+    depends_on:
+      - postgres
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  postgres_data:
+  huggingface_cache:
+  pip_cache:
+  torch_cache:

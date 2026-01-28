@@ -1,0 +1,17 @@
+fastapi
+uvicorn[standard]
+
+sqlalchemy
+psycopg2-binary
+pandas
+
+apify-client
+
+python-dotenv
+tenacity
+
+torch
+transformers
+sentencepiece
+huggingface_hub[hf_xet] # Recommended by HF for faster downloads than HTTPS
+APScheduler
