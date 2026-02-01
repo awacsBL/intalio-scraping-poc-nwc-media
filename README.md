@@ -311,3 +311,13 @@ Database statistics:
 ```bash
 curl http://localhost:8000/stats
 ```
+
+## Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Then open browser at `http://localhost:3000`
